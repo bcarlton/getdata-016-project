@@ -1,0 +1,523 @@
+Greetings!  This is the codebook file designed for the Getting and Cleaning Data Coursera course project on UCI Human Activity Recognition (HAR) data. It accompanies the run_analysis.R script which handles the actual data tidying and manipulation.  The script outputs a file called 'BCarlton - GroupedAvgsByActivityAndSubj.txt' which is a dataset containing averages of all mean and standard deviation data from the UCI HAR Dataset grouped by activity and subject.
+
+To best explain the nature of each of the variables, I will quote directly from the UCI HAR dataset's own readme file to give more detail into the nature of each of these variables:
+
+"The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. 
+
+The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain. See 'features_info.txt' for more details.
+
+-From the description above, you can quickly derive the following information about the naming schema:
+	-Most of the variables in this set follow the following scheme: [GroupedAvg-][t or f][name from the UCI HAR dataset]
+	-The GroupedAvg- prefix indicates that this is average of the particular variable from the UCI HAR dataset by activity and subject. Each cell is the grouped average of all entries of the intersection of a particular subject, activity and HAR variable. The prefix was added to distinguish these variables from the UCI HAR data for clarity's sake.
+	-The [t or f] letter in front of the UCI HAR variable name indicates whether or not this is raw time (t) domain data or post Fourier transform frequency (f) domain data.
+	-Finally, the UCI HAR variable names are many, and will be explained with each variable below.
+
+-The dataset is simple considering the types of variables to be had.  With the exception of "activityDescription" and "subjectID", all of the variables are of the numeric type and, given normalization by the UCI HAR data team, all values will be found in the range of [-1, 1].
+
+-Fourier transformed variables have units given by the original unit multiplied by the time unit being used e.g. a meters/(second)^2 unit will be fourier transformed to yield meters/second.
+
+
+"activityDescription"
+	-character
+	-identifies the type of activity taking place during the measurement
+	-will be one of these six values: WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING
+
+"subjectID"
+	-integer
+	-a number from 1 to 30 identifying the 30 volunteers who participated in the tests
+
+"GroupedAvg-tBodyAccMeanX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the filtered linear body acceleration values from the raw acceleration value in the X direction only
+
+"GroupedAvg-tBodyAccMeanY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the filtered linear body acceleration values from the raw acceleration value in the Y direction only
+
+"GroupedAvg-tBodyAccMeanZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the filtered linear body acceleration values from the raw acceleration value in the Z direction only
+
+"GroupedAvg-tGravityAccMeanX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the filtered linear gravity acceleration values from the raw acceleration value in the X direction only
+
+"GroupedAvg-tGravityAccMeanY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the filtered linear gravity acceleration values from the raw acceleration value in the Y direction only
+
+"GroupedAvg-tGravityAccMeanZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the filtered linear gravity acceleration values from the raw acceleration value in the Z direction only
+
+"GroupedAvg-tBodyAccJerkMeanX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-mean of the first derivative of the BodyAccX values in time.  X direction only.
+
+"GroupedAvg-tBodyAccJerkMeanY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-mean of the first derivative of the BodyAccY values in time.  Y direction only.
+
+"GroupedAvg-tBodyAccJerkMeanZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-mean of the first derivative of the BodyAccZ values in time.  Z direction only.
+
+"GroupedAvg-tBodyGyroMeanX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/second
+	-mean of the body angular velocity values about the X axis (in the YZ plane)
+
+"GroupedAvg-tBodyGyroMeanY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/second
+	-mean of the body angular velocity values about the Y axis (in the XZ plane)
+
+"GroupedAvg-tBodyGyroMeanZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/second
+	-mean of the body angular velocity values about the Z axis (in the XY plane)
+
+"GroupedAvg-tBodyGyroJerkMeanX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the first derivative of the body angular velocity values about the X axis (in the YZ plane)
+
+"GroupedAvg-tBodyGyroJerkMeanY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the first derivative of the body angular velocity values about the Y axis (in the XZ plane)
+
+"GroupedAvg-tBodyGyroJerkMeanZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the body angular velocity values about the Z axis (in the XY plane)
+
+"GroupedAvg-tBodyAccMagMean"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the magnitude of the linear body acceleration values
+	-magnitude values calculated by normal Euclidean means
+
+"GroupedAvg-tGravityAccMagMean"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the magnitude of the linear gravity acceleration values
+	-magnitude values calculated by normal Euclidean means
+
+"GroupedAvg-tBodyAccJerkMagMean"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-mean of the magnitude of the linear body acceleration first derivatives
+	-magnitude values calculated by normal Euclidean means
+
+"GroupedAvg-tBodyGyroMagMean"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: radians/second
+	-mean of the magnitude values of the angular velocity values
+	-magnitude value calculated by normal Euclidean means
+
+"GroupedAvg-tBodyGyroJerkMagMean"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the magnitude values of the angular velocity values
+	-magnitude value calculated by normal Euclidean means
+
+"GroupedAvg-fBodyAccMeanX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/second
+	-mean of the Fourier transformed linear body acceleration values from the raw acceleration value in the X direction only
+
+"GroupedAvg-fBodyAccMeanY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/second
+	-mean of the Fourier transformed linear body acceleration values from the raw acceleration value in the Y direction only
+
+"GroupedAvg-fBodyAccMeanZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/second
+	-mean of the Fourier transformed linear body acceleration values from the raw acceleration value in the Z direction only
+
+"GroupedAvg-fBodyAccMeanFreqX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure (meters/second)
+	-weighted average of the frequency components of linear body acceleration in the X direction to obtain a mean frequency
+
+"GroupedAvg-fBodyAccMeanFreqY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure (meters/second)
+	-weighted average of the frequency components of linear body acceleration in the Y direction to obtain a mean frequency
+
+"GroupedAvg-fBodyAccMeanFreqZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure (meters/second)
+	-weighted average of the frequency components of linear body acceleration in the Z direction to obtain a mean frequency
+
+"GroupedAvg-fBodyAccJerkMeanX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the Fourier transformed linear body jerk values in the X direction only
+
+"GroupedAvg-fBodyAccJerkMeanY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the Fourier transformed linear body jerk values in the Y direction only
+
+"GroupedAvg-fBodyAccJerkMeanZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-mean of the Fourier transformed linear body jerk values in the Z direction only
+
+"GroupedAvg-fBodyAccJerkMeanFreqX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-weighted average of the frequency components of linear body jerk values in the X direction to obtain a mean frequency
+
+"GroupedAvg-fBodyAccJerkMeanFreqY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-weighted average of the frequency components of linear body jerk values in the Y direction to obtain a mean frequency
+
+"GroupedAvg-fBodyAccJerkMeanFreqZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-weighted average of the frequency components of linear body jerk values in the Z direction to obtain a mean frequency
+
+"GroupedAvg-fBodyGyroMeanX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-mean of the Fourier transformed angular velocity values about the X axis (YZ plane) 
+
+"GroupedAvg-fBodyGyroMeanY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-mean of the Fourier transformed angular velocity values about the Y axis (XZ plane)
+
+"GroupedAvg-fBodyGyroMeanZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-mean of the Fourier transformed angular velocity values about the Z axis (XY plane) 
+
+"GroupedAvg-fBodyGyroMeanFreqX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-weighted average of the frequency components of angular velocity values along the X-axis to obtain a mean frequency
+
+"GroupedAvg-fBodyGyroMeanFreqY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-weighted average of the frequency components of angular velocity values along the Y-axis to obtain a mean frequency
+
+"GroupedAvg-fBodyGyroMeanFreqZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-weighted average of the frequency components of angular velocity values along the Z-axis to obtain a mean frequency
+
+"GroupedAvg-fBodyAccMagMean"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians/second
+	-mean of the Fourier transformed linear body acceleration magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyAccMagMeanFreq"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians/second
+	-weighted average of the frequency components of the mean of the Fourier transformed linear body acceleration magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyAccJerkMagMean"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the Fourier transformed linear body jerk magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyAccJerkMagMeanFreq"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians/(second)^2
+	-weighted average of the frequency components of the mean of the Fourier transformed linear body jerk magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyGyroMagMean"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-mean of the Fourier transformed body angular velocity magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyGyroMagMeanFreq"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-weighted average of the frequency components of the mean of the Fourier transformed body angular velocity magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyGyroJerkMagMean"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians/second
+	-mean of the Fourier transformed body angular jerk magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyGyroJerkMagMeanFreq"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-weighted average of the frequency components of the mean of the Fourier transformed body angular jerk magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-tBodyAccStdX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the filtered linear body acceleration values from the raw acceleration value in the X direction only
+
+"GroupedAvg-tBodyAccStdY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the filtered linear body acceleration values from the raw acceleration value in the Y direction only
+
+"GroupedAvg-tBodyAccStdZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the filtered linear body acceleration values from the raw acceleration value in the Z direction only
+
+"GroupedAvg-tGravityAccStdX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the filtered linear gravity acceleration values from the raw acceleration value in the X direction only
+
+"GroupedAvg-tGravityAccStdY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the filtered linear gravity acceleration values from the raw acceleration value in the Y direction only
+
+"GroupedAvg-tGravityAccStdZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the filtered linear gravity acceleration values from the raw acceleration value in the Z direction only
+
+"GroupedAvg-tBodyAccJerkStdX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-standard deviation of the first derivative of the BodyAccX values in time.  X direction only.
+
+"GroupedAvg-tBodyAccJerkStdY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-standard deviation of the first derivative of the BodyAccY values in time.  Y direction only.
+
+"GroupedAvg-tBodyAccJerkStdZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-standard deviation of the first derivative of the BodyAccZ values in time.  Z direction only.
+
+"GroupedAvg-tBodyGyroStdX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/second
+	-standard deviation of the body angular velocity values about the X axis (in the YZ plane)
+
+"GroupedAvg-tBodyGyroStdY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/second
+	-standard deviation of the body angular velocity values about the Y axis (in the XZ plane)
+
+"GroupedAvg-tBodyGyroStdZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/second
+	-standard deviation of the body angular velocity values about the Z axis (in the XY plane)
+
+"GroupedAvg-tBodyGyroJerkStdX"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-standard deviation of the first derivative of the body angular velocity values about the X axis (in the YZ plane)
+
+"GroupedAvg-tBodyGyroJerkStdY"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the first derivative of the body angular velocity values about the Y axis (in the XZ plane)
+
+"GroupedAvg-tBodyGyroJerkStdZ"
+	-numeric
+	-time domain (pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-mean of the first derivative of the body angular velocity values about the Z axis (in the XY plane)
+
+"GroupedAvg-tBodyAccMagStd"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the magnitude of the linear body acceleration values
+	-magnitude values calculated by normal Euclidean means
+
+"GroupedAvg-tGravityAccMagStd"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the magnitude of the linear gravity acceleration values
+	-magnitude values calculated by normal Euclidean means
+
+"GroupedAvg-tBodyAccJerkMagStd"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: meters/(second)^3
+	-standard deviation of the magnitude of the linear body acceleration first derivatives
+	-magnitude values calculated by normal Euclidean means
+
+"GroupedAvg-tBodyGyroMagStd"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: radians/second
+	-standard deviation of the magnitude values of the angular velocity values
+	-magnitude value calculated by normal Euclidean means
+
+"GroupedAvg-tBodyGyroJerkMagStd"
+	-numeric
+	-time domain(pre-fourier transform)
+	-unit of measure: radians/(second)^2
+	-standard deviation of the magnitude of the first derivative of the angular velocity values
+	-magnitude value calculated by normal Euclidean means
+
+"GroupedAvg-fBodyAccStdX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/second
+	-standard deviation of the Fourier transformed linear body acceleration values from the raw acceleration value in the X direction only
+
+"GroupedAvg-fBodyAccStdY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/second
+	-standard deviation of the Fourier transformed linear body acceleration values from the raw acceleration value in the Y direction only
+
+"GroupedAvg-fBodyAccStdZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/second
+	-standard deviation of the Fourier transformed linear body acceleration values from the raw acceleration value in the Z direction only
+
+"GroupedAvg-fBodyAccJerkStdX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the Fourier transformed linear body jerk values along the X-axis
+
+"GroupedAvg-fBodyAccJerkStdY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the Fourier transformed linear body jerk values along the Y-axis
+
+"GroupedAvg-fBodyAccJerkStdZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the Fourier transformed linear body jerk values along the Z-axis
+
+"GroupedAvg-fBodyGyroStdX"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-standard deviation of the Fourier transformed angular velocity values about the X axis (YZ plane)
+
+"GroupedAvg-fBodyGyroStdY"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-standard deviation of the Fourier transformed angular velocity values about the Y axis (XZ plane)
+
+"GroupedAvg-fBodyGyroStdZ"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-standard deviation of the Fourier transformed angular velocity values about the Z axis (XY plane)
+
+"GroupedAvg-fBodyAccMagStd"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians/second
+	-standard deviation of the Fourier transformed linear body acceleration magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyAccJerkMagStd"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: meters/(second)^2
+	-standard deviation of the Fourier transformed body linear acceleration magnitudes
+	-magnitudes calculated by normal Euclidean means
+
+"GroupedAvg-fBodyBodyGyroMagStd"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-standard deviation of the Fourier transformed body angular velocity magnitudes
+	-magnitudes calculated by standard Euclidean means
+
+"GroupedAvg-fBodyBodyGyroJerkMagStd"
+	-numeric
+	-frequency domain (post-fourier transform)
+	-unit of measure: radians
+	-standard deviation of the Fourier transformed body angular jerk magnitudes
+	-magnitudes calculated by standard Euclidean means
